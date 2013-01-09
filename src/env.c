@@ -14,6 +14,34 @@
 #include <string.h>
 #include <stdio.h>
 
+#ifdef _WIN32
+int
+unsetenv(const char* name)
+{
+  char* p = malloc(strlen(name) + 2);
+  if (!p) return -1;
+  strcpy(p, name);
+  strcat(p, "=");
+  int r = _putenv(p);
+  free(p);
+  return r;
+}
+
+int
+setenv(const char* name, const char* value, int overwrite)
+{
+  char* p = malloc(strlen(name) + strlen(value) + 2);
+  if (!p) return -1;
+  strcpy(p, name);
+  strcat(p, "=");
+  strcat(p, value);
+  int r = _putenv(p);
+  free(p);
+  return r;
+}
+#define environ _environ
+#endif
+
 static char **origenviron;
 
 extern char **environ;
@@ -138,12 +166,12 @@ mrb_env_to_hash(mrb_state *mrb, mrb_value self)
 {
   int i;
   mrb_value hash;
-  int ai = mrb_gc_arena_save(mrb);
 
   hash = mrb_hash_new(mrb);
   for (i = 0; environ[i] != NULL; i++) {
     char *str = strchr(environ[i], '=');
     if (str != NULL) {
+      int ai = mrb_gc_arena_save(mrb);
       int len = str - environ[i];
       mrb_value key = mrb_str_new(mrb, environ[i], len);
       str++;
@@ -166,12 +194,14 @@ mrb_env_to_a(mrb_state *mrb, mrb_value self)
   for (i = 0; environ[i] != NULL; i++) {
     char *str = strchr(environ[i], '=');
     if (str != NULL) {
+      int ai = mrb_gc_arena_save(mrb);
       mrb_value elem = mrb_ary_new(mrb);
       int len = str - environ[i];
       mrb_ary_push(mrb, elem, mrb_str_new(mrb, environ[i], len));
       str++;
       mrb_ary_push(mrb, elem, mrb_str_new(mrb, str, strlen(str)));
       mrb_ary_push(mrb, ary, elem);
+      mrb_gc_arena_restore(mrb, ai);
     }
   }
 
