@@ -10,11 +10,11 @@ Prerequisites:
 
     activate GEMs in *build_config.rb*
     * conf.gem :git => 'https://github.com/iij/mruby-env.git', :branch => 'master'
-    env ENABLE_GEMS=true ruby ./minirake
+    ruby ./minirake
 
 ### To run the tests:
 
-    env ENABLE_GEMS=true ruby ./minirake test
+    ruby ./minirake test
 
 
 # LICENSE
