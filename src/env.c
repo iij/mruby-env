@@ -285,3 +285,8 @@ mrb_mruby_env_gem_init(mrb_state *mrb)
 
   mrb_define_global_const(mrb, "ENV", mrb_obj_value(e));
 }
+
+void
+mrb_mruby_env_gem_final(mrb_state *mrb)
+{
+}
