@@ -1,4 +1,4 @@
 MRuby::Gem::Specification.new('mruby-env') do |spec|
   spec.license = 'MIT'
-  spec.authors = 'IIJ mruby developers'
+  spec.authors = 'Internet Initiative Japan Inc.'
 end
