@@ -59,7 +59,7 @@ mrb_env_getenv(mrb_state *mrb, mrb_value name)
   if (env == NULL) {
     return mrb_nil_value();
   }
-  return mrb_str_new2(mrb, env);
+  return mrb_str_new_cstr(mrb, env);
 }
 
 static mrb_value
@@ -218,7 +218,7 @@ mrb_env_inspect(mrb_state *mrb, mrb_value self)
 static mrb_value
 mrb_env_to_s(mrb_state *mrb, mrb_value self)
 {
-  return mrb_str_new2(mrb, "ENV");
+  return mrb_str_new_cstr(mrb, "ENV");
 }
 
 static mrb_value
