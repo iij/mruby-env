@@ -13,6 +13,7 @@
 #include "mruby/variable.h"
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #ifdef _WIN32
 int
