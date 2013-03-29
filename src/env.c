@@ -19,11 +19,12 @@
 int
 unsetenv(const char* name)
 {
+  int r;
   char* p = malloc(strlen(name) + 2);
   if (!p) return -1;
   strcpy(p, name);
   strcat(p, "=");
-  int r = _putenv(p);
+  r = _putenv(p);
   free(p);
   return r;
 }
@@ -31,12 +32,13 @@ unsetenv(const char* name)
 int
 setenv(const char* name, const char* value, int overwrite)
 {
+  int r;
   char* p = malloc(strlen(name) + strlen(value) + 2);
   if (!p) return -1;
   strcpy(p, name);
   strcat(p, "=");
   strcat(p, value);
-  int r = _putenv(p);
+  r = _putenv(p);
   free(p);
   return r;
 }
@@ -50,13 +52,15 @@ extern char **environ;
 static mrb_value
 mrb_env_getenv(mrb_state *mrb, mrb_value name)
 {
+  char *nam;
+  char *env;
   if (mrb_type(name) != MRB_TT_STRING) {
     mrb_raisef(mrb, E_TYPE_ERROR, "can't convert %s into String", mrb_obj_classname(mrb, name));
     return mrb_nil_value();
   }
 
-  char *nam = mrb_string_value_ptr(mrb, name);
-  char *env = getenv(nam);
+  nam = mrb_string_value_ptr(mrb, name);
+  env = getenv(nam);
   if (env == NULL) {
     return mrb_nil_value();
   }
@@ -66,12 +70,13 @@ mrb_env_getenv(mrb_state *mrb, mrb_value name)
 static mrb_value
 mrb_env_unsetenv(mrb_state *mrb, mrb_value name)
 {
+  char *nam;
   mrb_value val = mrb_env_getenv(mrb, name);
   if (mrb_nil_p(val)) {
     return mrb_nil_value();
   }
 
-  char *nam = mrb_string_value_ptr(mrb, name);
+  nam = mrb_string_value_ptr(mrb, name);
   if (unsetenv(nam) != 0) {
     mrb_raise(mrb, E_RUNTIME_ERROR, "can't delete environment variable");
     return mrb_nil_value();
@@ -82,6 +87,8 @@ mrb_env_unsetenv(mrb_state *mrb, mrb_value name)
 static mrb_value
 mrb_env_setenv(mrb_state *mrb, mrb_value name, mrb_value value)
 {
+  char *nam;
+  char *val;
   if (mrb_type(name) != MRB_TT_STRING) {
     mrb_raisef(mrb, E_TYPE_ERROR, "can't convert %s into String", mrb_obj_classname(mrb, name));
     return mrb_nil_value();
@@ -96,8 +103,8 @@ mrb_env_setenv(mrb_state *mrb, mrb_value name, mrb_value value)
     return mrb_nil_value();
   }
 
-  char *nam = mrb_string_value_ptr(mrb, name);
-  char *val = mrb_string_value_ptr(mrb, value);
+  nam = mrb_string_value_ptr(mrb, name);
+  val = mrb_string_value_ptr(mrb, value);
   if (setenv(nam, val, 1) != 0) {
     mrb_raise(mrb, E_RUNTIME_ERROR, "can't change environment variable");
     return mrb_nil_value();;
@@ -142,8 +149,9 @@ mrb_env_values(mrb_state *mrb, mrb_value self)
   for (i = 0; environ[i] != NULL; i++) {
     char *str = strchr(environ[i], '=');
     if (str) {
+      int len;
       str++;
-      int len = strlen(str);
+      len = strlen(str);
       mrb_ary_push(mrb, ary, mrb_str_new(mrb, str, len));
     }
   }
@@ -172,11 +180,12 @@ mrb_env_to_hash(mrb_state *mrb, mrb_value self)
   for (i = 0; environ[i] != NULL; i++) {
     char *str = strchr(environ[i], '=');
     if (str != NULL) {
+      mrb_value val;
       int ai = mrb_gc_arena_save(mrb);
       int len = str - environ[i];
       mrb_value key = mrb_str_new(mrb, environ[i], len);
       str++;
-      mrb_value val = mrb_str_new(mrb, str, strlen(str));
+      val = mrb_str_new(mrb, str, strlen(str));
       mrb_hash_set(mrb, hash, key, val);
       mrb_gc_arena_restore(mrb, ai);
     }
