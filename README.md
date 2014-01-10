@@ -1,6 +1,16 @@
 mruby-env
 =========
 
+mruby-env provides "ENV" object, which is a hash-like accessor
+for environment variables.
+
+### Methods
+
+```
+[] []= clear delete inspect keys size store to_a to_hash to_s values
+```
+
+
 ### To build:
 
 Prerequisites:
