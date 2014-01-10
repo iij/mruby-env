@@ -1,7 +1,6 @@
 /*
 ** env.c - ENV is a Hash-like accessor for environment variables.
 **
-** See Copyright Notice in mruby.h
 */
 
 #include "mruby.h"
@@ -281,17 +280,16 @@ mrb_mruby_env_gem_init(mrb_state *mrb)
 
   mrb_define_singleton_method(mrb, e,"[]",       mrb_env_aget,       MRB_ARGS_REQ(1));
   mrb_define_singleton_method(mrb, e,"[]=",      mrb_env_aset,       MRB_ARGS_REQ(2));
-  mrb_define_singleton_method(mrb, e,"store",    mrb_env_aset,       MRB_ARGS_REQ(2));
   mrb_define_singleton_method(mrb, e,"clear",    mrb_env_clear,      MRB_ARGS_NONE());
   mrb_define_singleton_method(mrb, e,"delete",   mrb_env_delete,     MRB_ARGS_REQ(1));
-  mrb_define_singleton_method(mrb, e,"keys",     mrb_env_keys,       MRB_ARGS_NONE());
-  mrb_define_singleton_method(mrb, e,"values",   mrb_env_values,     MRB_ARGS_NONE());
-  mrb_define_singleton_method(mrb, e,"size",     mrb_env_size,       MRB_ARGS_NONE());
-
-  mrb_define_singleton_method(mrb, e,"to_hash",  mrb_env_to_hash,    MRB_ARGS_NONE());
-  mrb_define_singleton_method(mrb, e,"to_a",     mrb_env_to_a,       MRB_ARGS_NONE());
   mrb_define_singleton_method(mrb, e,"inspect",  mrb_env_inspect,    MRB_ARGS_NONE());
+  mrb_define_singleton_method(mrb, e,"keys",     mrb_env_keys,       MRB_ARGS_NONE());
+  mrb_define_singleton_method(mrb, e,"size",     mrb_env_size,       MRB_ARGS_NONE());
+  mrb_define_singleton_method(mrb, e,"store",    mrb_env_aset,       MRB_ARGS_REQ(2));
+  mrb_define_singleton_method(mrb, e,"to_a",     mrb_env_to_a,       MRB_ARGS_NONE());
+  mrb_define_singleton_method(mrb, e,"to_hash",  mrb_env_to_hash,    MRB_ARGS_NONE());
   mrb_define_singleton_method(mrb, e,"to_s",     mrb_env_to_s,       MRB_ARGS_NONE());
+  mrb_define_singleton_method(mrb, e,"values",   mrb_env_values,     MRB_ARGS_NONE());
 
   mrb_define_global_const(mrb, "ENV", mrb_obj_value(e));
 }
