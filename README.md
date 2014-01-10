@@ -7,7 +7,8 @@ for environment variables.
 ### Methods
 
 ```
-[] []= clear delete inspect keys size store to_a to_hash to_s values
+[] []= clear delete has_key? include? inspect key? keys
+member? size store to_a to_hash to_s values
 ```
 
 

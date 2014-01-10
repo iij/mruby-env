@@ -68,6 +68,12 @@ if Object.const_defined?(:MTest)
       assert_equal("ENV", ENV.to_s)
     end
 
+    def test_env_has_key
+      set_dummy_env
+      assert_true  ENV.has_key?("FOO")
+      assert_false ENV.has_key?("BAR")
+    end
+
     def test_env_inspect
       set_dummy_env
       assert_equal("{\"FOO\"=>\"bar\"}", ENV.inspect)
