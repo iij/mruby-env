@@ -290,7 +290,7 @@ mrb_mruby_env_gem_init(mrb_state *mrb)
 
   origenviron = environ;
   e = (struct RObject*) mrb_obj_alloc(mrb, MRB_TT_OBJECT, mrb->object_class);
-  mrb_include_module(mrb, (struct RClass*)e, mrb_class_get(mrb, "Enumerable"));
+  mrb_include_module(mrb, (struct RClass*)e, mrb_module_get(mrb, "Enumerable"));
 
   mrb_define_singleton_method(mrb, e,"[]",       mrb_env_aget,       MRB_ARGS_REQ(1));
   mrb_define_singleton_method(mrb, e,"[]=",      mrb_env_aset,       MRB_ARGS_REQ(2));
