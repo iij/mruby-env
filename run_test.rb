@@ -19,9 +19,9 @@ MRuby::Build.new do |conf|
   toolchain :gcc
   conf.gembox 'default'
 
-  conf.gem :git => 'https://github.com/iij/mruby-mtest.git'
-  conf.gem :github => 'iij/mruby-io'
   conf.gem :core => 'mruby-time'
+  conf.gem :github => 'iij/mruby-io'
+  conf.gem :github => 'iij/mruby-mtest'
 
   conf.gem File.expand_path(File.dirname(__FILE__))
 end
