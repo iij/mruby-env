@@ -51,7 +51,7 @@ extern char **environ;
 static mrb_value
 mrb_env_getenv(mrb_state *mrb, mrb_value name)
 {
-  char *nam;
+  const char *nam;
   char *env;
   if (mrb_type(name) != MRB_TT_STRING) {
     mrb_raisef(mrb, E_TYPE_ERROR, "can't convert %S into String", mrb_obj_value(mrb_class(mrb, name)));
@@ -69,7 +69,7 @@ mrb_env_getenv(mrb_state *mrb, mrb_value name)
 static mrb_value
 mrb_env_unsetenv(mrb_state *mrb, mrb_value name)
 {
-  char *nam;
+  const char *nam;
   mrb_value val = mrb_env_getenv(mrb, name);
   if (mrb_nil_p(val)) {
     return mrb_nil_value();
@@ -86,8 +86,8 @@ mrb_env_unsetenv(mrb_state *mrb, mrb_value name)
 static mrb_value
 mrb_env_setenv(mrb_state *mrb, mrb_value name, mrb_value value)
 {
-  char *nam;
-  char *val;
+  const char *nam;
+  const char *val;
   if (mrb_type(name) != MRB_TT_STRING) {
     mrb_raisef(mrb, E_TYPE_ERROR, "can't convert %S into String", mrb_obj_value(mrb_class(mrb, name)));
     return mrb_nil_value();
