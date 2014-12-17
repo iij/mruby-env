@@ -259,16 +259,6 @@ mrb_env_aset(mrb_state *mrb, mrb_value self)
 }
 
 static mrb_value
-mrb_env_delete(mrb_state *mrb, mrb_value self)
-{
-  mrb_value name;
-
-  mrb_get_args(mrb, "o", &name);
-  mrb_env_unsetenv(mrb, name);
-  return mrb_nil_value();
-}
-
-static mrb_value
 mrb_env_clear(mrb_state *mrb, mrb_value self)
 {
   int i;
@@ -299,7 +289,6 @@ mrb_mruby_env_gem_init(mrb_state *mrb)
   mrb_define_singleton_method(mrb, e,"[]",       mrb_env_aget,       MRB_ARGS_REQ(1));
   mrb_define_singleton_method(mrb, e,"[]=",      mrb_env_aset,       MRB_ARGS_REQ(2));
   mrb_define_singleton_method(mrb, e,"clear",    mrb_env_clear,      MRB_ARGS_NONE());
-  mrb_define_singleton_method(mrb, e,"delete",   mrb_env_delete,     MRB_ARGS_REQ(1));
   mrb_define_singleton_method(mrb, e,"has_key?", mrb_env_has_key,    MRB_ARGS_REQ(1));
   mrb_define_singleton_method(mrb, e,"inspect",  mrb_env_inspect,    MRB_ARGS_NONE());
   mrb_define_singleton_method(mrb, e,"keys",     mrb_env_keys,       MRB_ARGS_NONE());

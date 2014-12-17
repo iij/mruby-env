@@ -81,8 +81,11 @@ if Object.const_defined?(:MTest)
 
     def test_env_delete
       set_dummy_env
-      ENV.delete 'FOO'
+      old = ENV['FOO']
+      ret = ENV.delete('FOO')
       assert_equal(0, ENV.size)
+      assert_equal(old, ret)
+      assert_equal(nil, ENV.delete('nosuchenv'))
     end
 
     def test_env_subst_nil
