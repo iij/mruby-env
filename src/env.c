@@ -258,21 +258,6 @@ mrb_env_aset(mrb_state *mrb, mrb_value self)
   return value;
 }
 
-static mrb_value
-mrb_env_clear(mrb_state *mrb, mrb_value self)
-{
-  int i;
-  mrb_value keys = mrb_env_keys(mrb, self);
-  int ai = mrb_gc_arena_save(mrb);
-
-  for (i = 0; i < RARRAY_LEN(keys); i++) {
-    mrb_env_unsetenv(mrb, mrb_ary_ref(mrb, keys, i));
-    mrb_gc_arena_restore(mrb, ai);
-  }
-
-  return self;
-}
-
 void
 mrb_mruby_env_gem_init(mrb_state *mrb)
 {
@@ -288,7 +273,6 @@ mrb_mruby_env_gem_init(mrb_state *mrb)
 
   mrb_define_singleton_method(mrb, e,"[]",       mrb_env_aget,       MRB_ARGS_REQ(1));
   mrb_define_singleton_method(mrb, e,"[]=",      mrb_env_aset,       MRB_ARGS_REQ(2));
-  mrb_define_singleton_method(mrb, e,"clear",    mrb_env_clear,      MRB_ARGS_NONE());
   mrb_define_singleton_method(mrb, e,"has_key?", mrb_env_has_key,    MRB_ARGS_REQ(1));
   mrb_define_singleton_method(mrb, e,"inspect",  mrb_env_inspect,    MRB_ARGS_NONE());
   mrb_define_singleton_method(mrb, e,"keys",     mrb_env_keys,       MRB_ARGS_NONE());
