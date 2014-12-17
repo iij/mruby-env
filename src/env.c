@@ -48,76 +48,20 @@ static char **origenviron;
 
 extern char **environ;
 
-static mrb_value
-mrb_env_getenv(mrb_state *mrb, mrb_value name)
-{
-  const char *nam;
-  char *env;
-  if (mrb_type(name) != MRB_TT_STRING) {
-    mrb_raisef(mrb, E_TYPE_ERROR, "can't convert %S into String", mrb_obj_value(mrb_class(mrb, name)));
-    return mrb_nil_value();
-  }
-
-  nam = mrb_string_value_ptr(mrb, name);
-  env = getenv(nam);
-  if (env == NULL) {
-    return mrb_nil_value();
-  }
-  return mrb_str_new_cstr(mrb, env);
-}
-
-static mrb_value
-mrb_env_unsetenv(mrb_state *mrb, mrb_value name)
-{
-  const char *nam;
-  mrb_value val = mrb_env_getenv(mrb, name);
-  if (mrb_nil_p(val)) {
-    return mrb_nil_value();
-  }
-
-  nam = mrb_string_value_ptr(mrb, name);
-  if (unsetenv(nam) != 0) {
-    mrb_raise(mrb, E_RUNTIME_ERROR, "can't delete environment variable");
-    return mrb_nil_value();
-  }
-  return val;
-}
-
-static mrb_value
-mrb_env_setenv(mrb_state *mrb, mrb_value name, mrb_value value)
-{
-  const char *nam;
-  const char *val;
-  if (mrb_type(name) != MRB_TT_STRING) {
-    mrb_raisef(mrb, E_TYPE_ERROR, "can't convert %S into String", mrb_obj_value(mrb_class(mrb, name)));
-    return mrb_nil_value();
-  }
-
-  if (mrb_nil_p(value)) {
-    return mrb_env_unsetenv(mrb, name);
-  }
-
-  if (mrb_type(value) != MRB_TT_STRING) {
-    mrb_raisef(mrb, E_TYPE_ERROR, "can't convert %S into String", mrb_obj_value(mrb_class(mrb, value)));
-    return mrb_nil_value();
-  }
-
-  nam = mrb_string_value_ptr(mrb, name);
-  val = mrb_string_value_ptr(mrb, value);
-  if (setenv(nam, val, 1) != 0) {
-    mrb_raise(mrb, E_RUNTIME_ERROR, "can't change environment variable");
-    return mrb_nil_value();;
-  }
-  return value;
-}
-
 mrb_value
 mrb_env_aget(mrb_state *mrb, mrb_value self)
 {
   mrb_value key;
+  const char *cname, *cvalue;
 
-  mrb_get_args(mrb, "o", &key);
-  return mrb_env_getenv(mrb, key);
+  mrb_get_args(mrb, "S", &key);
+  cname = mrb_string_value_cstr(mrb, &key);
+  cvalue = getenv(cname);
+  if (cvalue != NULL) {
+    return mrb_str_new_cstr(mrb, cvalue);
+  } else {
+    return mrb_nil_value();
+  }
 }
 
 mrb_value
@@ -248,12 +192,21 @@ static mrb_value
 mrb_env_aset(mrb_state *mrb, mrb_value self)
 {
   mrb_value name, value;
+  const char *cname, *cvalue;
 
-  mrb_get_args(mrb, "oo", &name, &value);
+  mrb_get_args(mrb, "So", &name, &value);
+  cname = mrb_string_value_cstr(mrb, &name);
+
   if (mrb_nil_p(value)) {
-    mrb_env_unsetenv(mrb, name);
+    if (unsetenv(cname) != 0) {
+      mrb_raise(mrb, E_RUNTIME_ERROR, "can't delete environment variable");
+    }
   } else {
-    mrb_env_setenv(mrb, name, value);
+    mrb_convert_type(mrb, value, MRB_TT_STRING, "String", "to_str");
+    cvalue = mrb_string_value_cstr(mrb, &value);
+    if (setenv(cname, cvalue, 1) != 0) {
+      mrb_raise(mrb, E_RUNTIME_ERROR, "can't change environment variable");
+    }
   }
   return value;
 }

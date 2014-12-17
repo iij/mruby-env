@@ -93,6 +93,21 @@ if Object.const_defined?(:MTest)
       ENV['FOO'] = nil
       assert_equal(0, ENV.size)
     end
+
+    def test_env_store
+      ENV['a'] = 'b'
+      assert_equal 'b', ENV['a']
+
+      ENV['a'] = 'c'
+      assert_equal 'c', ENV['a']
+
+      ENV['a'] = nil
+      assert_equal nil, ENV['a']
+
+      ENV['b'] = nil
+      assert_equal nil, ENV['b']
+      assert_equal 0, ENV.size
+    end
   end
 
   if $ok_test
