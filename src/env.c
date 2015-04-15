@@ -46,7 +46,6 @@ setenv(const char* name, const char* value, int overwrite)
 extern char **environ;
 #endif
 
-static char **origenviron;
 
 mrb_value
 mrb_env_aget(mrb_state *mrb, mrb_value self)
@@ -216,7 +215,6 @@ mrb_mruby_env_gem_init(mrb_state *mrb)
 {
   struct RObject *e;
 
-  origenviron = environ;
   e = (struct RObject*) mrb_obj_alloc(mrb, MRB_TT_OBJECT, mrb->object_class);
 #if defined(MRUBY_RELEASE_NO) && MRUBY_RELEASE_NO >= 10000
   mrb_include_module(mrb, (struct RClass*)e, mrb_module_get(mrb, "Enumerable"));
