@@ -42,11 +42,11 @@ setenv(const char* name, const char* value, int overwrite)
   return r;
 }
 #define environ _environ
+#else
+extern char **environ;
 #endif
 
 static char **origenviron;
-
-extern char **environ;
 
 mrb_value
 mrb_env_aget(mrb_state *mrb, mrb_value self)
