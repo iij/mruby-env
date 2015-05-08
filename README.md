@@ -20,7 +20,7 @@ Prerequisites:
     * libc
 
     activate GEMs in *build_config.rb*
-    * conf.gem :git => 'https://github.com/iij/mruby-env.git', :branch => 'master'
+    * conf.gem :github => 'iij/mruby-env'
     ruby ./minirake
 
 ### To run the tests:
