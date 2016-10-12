@@ -24,7 +24,7 @@ class << ENV
     elsif default != NONE
       default
     else
-      raise KeyError, "Key not found: #{key}"
+      raise KeyError, "key not found: #{key}"
     end
   end
 end
