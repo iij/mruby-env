@@ -4,6 +4,9 @@ mruby-env
 mruby-env provides "ENV" object, which is a hash-like accessor
 for environment variables.
 
+ - https://docs.ruby-lang.org/en/trunk/ENV.html (en)
+ - https://docs.ruby-lang.org/ja/latest/class/ENV.html (ja)
+
 ### Methods
 
 ```
